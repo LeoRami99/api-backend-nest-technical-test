@@ -23,6 +23,12 @@ class ProductModel extends Model<ProductModel> {
   @Column({
     type: DataType.TEXT,
     allowNull: false,
+    defaultValue: 'COP',
+  })
+  currency: string;
+  @Column({
+    type: DataType.TEXT,
+    allowNull: false,
   })
   description: string;
   @Column({
