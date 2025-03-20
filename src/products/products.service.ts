@@ -3,8 +3,8 @@ import {
   InternalServerErrorException,
   Inject,
 } from '@nestjs/common';
-import { Product } from '../core/domain/product.entity';
-import { ProductRepository } from '../ports/product.repository';
+import { Product } from './core/domain/product.entity';
+import { ProductRepository } from './ports/product.repository';
 
 @Injectable()
 export class ProductsService {
