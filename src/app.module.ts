@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ProductsModule } from './products/products.module';
 import { TransactionsModule } from './transactions/transactions.module'; // Asegúrate de importar tus modelos
+import { ApiExternalModule } from './api-external/api-external.module';
+import { getEnvs } from './config/config.envs';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,17 +17,19 @@ import { TransactionsModule } from './transactions/transactions.module'; // Aseg
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         dialect: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: Number(configService.get<number>('DB_PORT')),
-        username: configService.get<string>('DB_USER'),
-        password: configService.get<string>('DB_PASS'),
-        database: configService.get<string>('DB_NAME'),
+        host: getEnvs(configService).DB_HOST,
+        port: getEnvs(configService).DB_PORT,
+        username: getEnvs(configService).DB_USER,
+        password: getEnvs(configService).DB_PASS,
+        database: getEnvs(configService).DB_NAME,
         autoLoadModels: true,
         synchronize: true,
+        alter: true,
       }),
     }),
     ProductsModule,
     TransactionsModule,
+    ApiExternalModule,
   ],
 })
 export class AppModule {}
