@@ -31,6 +31,12 @@ class TransactionModel extends Model<TransactionModel> {
     defaultValue: 'pending',
   })
   status: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  idExternalTransaction: string;
   @Column({
     type: DataType.UUID,
     allowNull: false,
