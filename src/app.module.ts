@@ -24,7 +24,6 @@ import { getEnvs } from './config/config.envs';
         database: getEnvs(configService).DB_NAME,
         autoLoadModels: true,
         synchronize: true,
-        alter: true,
       }),
     }),
     ProductsModule,
