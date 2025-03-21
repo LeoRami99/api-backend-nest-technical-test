@@ -7,6 +7,11 @@ export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
   @Post('/')
   createTransaction(@Body() createTransactionDTO: CreateTransactionDto) {
-    return this.transactionsService.createTransaction(createTransactionDTO);
+    return this.transactionsService.createTransaction(
+      createTransactionDTO.transaction,
+      createTransactionDTO.token_card,
+      createTransactionDTO.acceptance_token,
+      createTransactionDTO.installments,
+    );
   }
 }
