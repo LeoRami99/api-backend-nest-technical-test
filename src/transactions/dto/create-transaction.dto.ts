@@ -1,13 +1,14 @@
-import { IsNumber, IsString, IsNotEmpty, Min, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUUID,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
-/* public id: string,
-    public amount: number,
-    public status: string,
-    public userId: string,
-    public methodPayment: string,
-    public productId: string,
-    public price: number, */
-export class CreateTransactionDto {
+export class TransactionDataDto {
   @IsNumber()
   @IsNotEmpty()
   @Min(1)
@@ -31,4 +32,24 @@ export class CreateTransactionDto {
   @IsNumber()
   @Min(1000)
   price: number;
+}
+
+export class CreateTransactionDto {
+  @ValidateNested()
+  @Type(() => TransactionDataDto)
+  @IsNotEmpty()
+  transaction: TransactionDataDto;
+
+  @IsNotEmpty()
+  @IsString()
+  token_card: string;
+
+  @IsNotEmpty()
+  @IsString()
+  acceptance_token: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  installments: number;
 }
