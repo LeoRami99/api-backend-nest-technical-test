@@ -11,4 +11,5 @@ export const getEnvs = (configService: ConfigService) => ({
   API_EXTERNAL_URL_SANDBOX: configService.get<string>('UAT_SANDBOX_URL'),
   PUBLIC_KEY_SANDBOX: configService.get<string>('PUBLIC_KEY'),
   PRIVATE_KEY_SANDBOX: configService.get<string>('PRIVATE_KEY'),
+  INTEGRITY_KEY_SANDBOX: configService.get<string>('INTEGRITY_KEY'),
 });
