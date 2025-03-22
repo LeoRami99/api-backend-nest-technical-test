@@ -8,6 +8,7 @@ import { getEnvs } from '../config/config.envs';
 import { ConfigService } from '@nestjs/config';
 
 import { convertToCents } from '../utils/convertToCents';
+import { generateIdInternalTransaction } from 'src/utils/generateIdInternalTransaction';
 
 @Injectable()
 export class TransactionsService {
@@ -33,9 +34,18 @@ export class TransactionsService {
       }
       const priceCents = convertToCents(transaction.price);
 
+      const idReferenceInternal = generateIdInternalTransaction(
+        transaction.productId,
+        new Date(),
+      );
+
+      if (!idReferenceInternal) {
+        throw new Error('Internal reference could not be generated');
+      }
+
       // Generar firma de seguridad
       const signature = await hash256Signature(
-        transaction.productId,
+        idReferenceInternal,
         priceCents.toString(),
         'COP',
         integrityKey,
@@ -47,7 +57,7 @@ export class TransactionsService {
         amount_in_cents: priceCents,
         currency: 'COP',
         signature: signature,
-        reference: transaction.productId,
+        reference: idReferenceInternal,
         customer_email: 'pruebasensandbox@yopmail.com',
         redirect_url: 'http://localhost:3000/redirect',
         payment_method: {
@@ -64,10 +74,10 @@ export class TransactionsService {
       if (!transactionDataExternal) {
         throw new Error('Transaction could not be created in external API');
       }
-      console.log('transactionDataExternal', transactionDataExternal);
 
       const transactionData = await this.transactionRepository.create({
         ...transaction,
+        referenceInternalTransaction: idReferenceInternal,
         idExternalTransaction: transactionDataExternal.data.id,
       });
       if (!transactionData) {
@@ -81,6 +91,24 @@ export class TransactionsService {
       }
       throw new HttpException(
         (error as Error).message || 'Could not create transaction',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+  async updateInternalByExternalTransaction(
+    idExternalTransaction: string,
+    status: string,
+  ): Promise<Transaction> {
+    try {
+      const transaction =
+        await this.transactionRepository.updateInternalByExternalId(
+          idExternalTransaction,
+          status,
+        );
+      return transaction;
+    } catch {
+      throw new HttpException(
+        'Error updating transaction',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
