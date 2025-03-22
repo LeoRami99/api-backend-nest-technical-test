@@ -19,7 +19,11 @@ class TransactionModel extends Model<TransactionModel> {
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
-
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  referenceInternalTransaction: string;
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
