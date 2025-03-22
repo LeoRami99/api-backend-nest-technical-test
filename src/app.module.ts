@@ -6,6 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { TransactionsModule } from './transactions/transactions.module'; // Asegúrate de importar tus modelos
 import { ApiExternalModule } from './api-external/api-external.module';
 import { getEnvs } from './config/config.envs';
+import { WebhookModule } from './webhook/webhook.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +30,7 @@ import { getEnvs } from './config/config.envs';
     ProductsModule,
     TransactionsModule,
     ApiExternalModule,
+    WebhookModule,
   ],
 })
 export class AppModule {}
