@@ -16,5 +16,6 @@ import { ApiExternalModule } from '../api-external/api-external.module';
       useClass: SequelizeTransactionRepositoryAdapter,
     },
   ],
+  exports: [TransactionsService, SequelizeModule],
 })
 export class TransactionsModule {}
