@@ -16,5 +16,6 @@ import { Module } from '@nestjs/common';
       useClass: SequelizeProductRepositoryAdapter,
     },
   ],
+  exports: [ProductsService, SequelizeModule],
 })
 export class ProductsModule {}
