@@ -24,4 +24,12 @@ export class ProductsService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  updateStockService(idProduct: string, amount: number): Promise<boolean> {
+    try {
+      return this.productRepository.updateStock(idProduct, amount);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
 }
