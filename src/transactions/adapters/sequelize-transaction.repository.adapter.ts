@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { TransactionModel } from '../../models/transaction.model';
+// import { Transaction } from '../core/domain/transaction.entity';
 
 @Injectable()
 export class SequelizeTransactionRepositoryAdapter {
@@ -30,5 +31,23 @@ export class SequelizeTransactionRepositoryAdapter {
     }
 
     return transaction;
+  }
+
+  async getTransactionByIdInternal(
+    referenceInternalTransaction: string,
+  ): Promise<TransactionModel> {
+    const transaction = await this.transactionModel.findOne({
+      where: {
+        referenceInternalTransaction,
+      },
+    });
+
+    if (!transaction) {
+      throw new Error(
+        `Transaction with id ${referenceInternalTransaction} not found`,
+      );
+    }
+
+    return transaction.get();
   }
 }
