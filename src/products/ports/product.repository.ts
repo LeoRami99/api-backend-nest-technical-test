@@ -7,4 +7,5 @@ export interface ProductRepository {
     limit: number,
     search: string,
   ): Promise<PaginatedResult<Product>>;
+  updateStock(idProduct: string, amount: number): Promise<boolean>;
 }
