@@ -31,4 +31,20 @@ export class SequelizeProductRepositoryAdapter {
       hasPrevious: page > 1,
     };
   }
+  async updateStock(idProduct: string, amount: number): Promise<boolean> {
+    const product = await this.productModel.findByPk(idProduct);
+    if (!product || product.stock <= 0) {
+      return false;
+    }
+
+    const updatedStock = product.get().stock - amount;
+    console.log(updatedStock);
+
+    if (updatedStock < 0) {
+      return false;
+    }
+
+    await product.update({ stock: updatedStock });
+    return true;
+  }
 }
