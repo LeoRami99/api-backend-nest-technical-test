@@ -113,4 +113,20 @@ export class TransactionsService {
       );
     }
   }
+  async getTransactionByIdInternal(
+    idInternalTransaction: string,
+  ): Promise<Transaction> {
+    try {
+      const transaction =
+        await this.transactionRepository.getTransactionByIdInternal(
+          idInternalTransaction,
+        );
+      return transaction;
+    } catch {
+      throw new HttpException(
+        'Error getting transaction',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
