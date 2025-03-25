@@ -7,13 +7,15 @@ export class ProductsController {
 
   @Get('/')
   async getAllProducts(
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
     @Query('search') search?: string,
   ) {
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
     const products = await this.productsService.getAllProducts(
-      page,
-      limit,
+      pageNumber,
+      limitNumber,
       search,
     );
     return {
