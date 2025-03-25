@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { ProductModel } from '../../models/product.model';
 import { PaginatedResult } from '../../common/interfaces/paginated-result.interface';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class SequelizeProductRepositoryAdapter {
@@ -12,22 +13,30 @@ export class SequelizeProductRepositoryAdapter {
   async findAndCountAll(
     page: number,
     limit: number,
-    search: string,
+    search?: string,
   ): Promise<PaginatedResult<ProductModel>> {
     const offset = (page - 1) * limit;
-    const where = search ? { name: search } : {};
+
+    const where = search
+      ? { name: { [Op.iLike]: `%${search}%` } } // búsqueda parcial, insensible a mayúsculas
+      : {};
+
     const { rows, count } = await this.productModel.findAndCountAll({
       where,
       offset,
       limit,
+      order: [['createdAt', 'DESC']], // opcional, orden por fecha de creación
     });
+
+    const totalPages = Math.ceil(count / limit);
+
     return {
       rows,
       count,
-      totalPages: Math.ceil(count / limit),
+      totalPages,
       currentPage: page,
       pageSize: limit,
-      hasNext: page < Math.ceil(count / limit),
+      hasNext: page < totalPages,
       hasPrevious: page > 1,
     };
   }
@@ -38,7 +47,6 @@ export class SequelizeProductRepositoryAdapter {
     }
 
     const updatedStock = product.get().stock - amount;
-    console.log(updatedStock);
 
     if (updatedStock < 0) {
       return false;
