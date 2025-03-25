@@ -18,6 +18,7 @@ export class ProductsService {
     limit: number = 10,
     search: string = '',
   ): Promise<{ rows: Product[]; count: number }> {
+    console.log(page, limit, search);
     try {
       return this.productRepository.findAndCountAll(page, limit, search);
     } catch (error) {
