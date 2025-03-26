@@ -25,6 +25,12 @@ import { WebhookModule } from './webhook/webhook.module';
         database: getEnvs(configService).DB_NAME,
         autoLoadModels: true,
         synchronize: true,
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
     ProductsModule,
