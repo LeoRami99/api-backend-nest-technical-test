@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
@@ -13,5 +13,9 @@ export class TransactionsController {
       createTransactionDTO.acceptance_token,
       createTransactionDTO.installments,
     );
+  }
+  @Get('/:id')
+  getTransactionById(@Param('id') id: string) {
+    return this.transactionsService.getTransactionById(id);
   }
 }
