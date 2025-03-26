@@ -13,6 +13,13 @@ export class SequelizeTransactionRepositoryAdapter {
   async create(transaction: TransactionModel): Promise<TransactionModel> {
     return this.transactionModel.create(transaction);
   }
+  async getTransactionById(id: string): Promise<TransactionModel> {
+    const transaction = await this.transactionModel.findByPk(id);
+    if (!transaction) {
+      throw new Error(`Transaction with id ${id} not found`);
+    }
+    return transaction.get();
+  }
   async updateInternalByExternalId(
     idExternalTransaction: string,
     status: string,
