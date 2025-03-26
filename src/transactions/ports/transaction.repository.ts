@@ -9,4 +9,6 @@ export interface TransactionRepository {
   getTransactionByIdInternal(
     idInternalTransaction: string,
   ): Promise<Transaction>;
+
+  getTransactionById(id: string): Promise<Transaction>;
 }
