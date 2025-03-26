@@ -1,21 +1,14 @@
-FROM node:23-alpine
-
+FROM node:23-slim
 
 WORKDIR /app
 
-
 COPY package*.json ./
-
-RUN npm install --production
-
+RUN npm install
 
 COPY . .
 
-
 RUN npm run build
 
-
 EXPOSE 3000
-
 
 CMD ["node", "dist/main"]
