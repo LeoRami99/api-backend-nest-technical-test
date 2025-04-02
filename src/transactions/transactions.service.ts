@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { convertToCents } from '../utils/convertToCents';
 import { generateIdInternalTransaction } from 'src/utils/generateIdInternalTransaction';
+import { IVA } from 'src/const/const.tax';
 
 @Injectable()
 export class TransactionsService {
@@ -32,7 +33,10 @@ export class TransactionsService {
       if (!integrityKey) {
         throw new Error('Integrity key not configured');
       }
-      const priceCents = convertToCents(transaction.price);
+      const priceWithIVA = transaction.price * IVA;
+      const totalPriceWithIVA = (transaction.price + priceWithIVA).toFixed(0);
+
+      const priceCents = convertToCents(Number(totalPriceWithIVA));
 
       const idReferenceInternal = generateIdInternalTransaction(
         transaction.productId,
