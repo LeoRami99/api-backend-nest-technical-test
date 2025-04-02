@@ -57,8 +57,8 @@ describe('ProductsController', () => {
       const getAllProductsMock = jest.fn().mockResolvedValue(mockProducts);
       productsService.getAllProducts = getAllProductsMock;
 
-      const page = 1;
-      const limit = 10;
+      const page = '1';
+      const limit = '10';
       const search = 'Producto';
 
       const result = await controller.getAllProducts(page, limit, search);
